@@ -12,6 +12,14 @@ var QuestionModel = NativeForm.struct({
   answer: NativeForm.Number
 });
 
+var options = {
+  fields: {
+    answer: {
+      error: 'Insert a valid value'
+    }
+  }
+};
+
 var QuestionView = React.createClass({
 
   getInitialState: function(){
@@ -49,6 +57,7 @@ var QuestionView = React.createClass({
         <QuestionForm
           ref="questionForm"
           type={QuestionModel}
+          options={options}
           value={this.state.value}
           onChange={this.onChange}
         />
