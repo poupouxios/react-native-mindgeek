@@ -16,6 +16,7 @@ import {
 import Modal from 'react-native-modalbox';
 import CssStyle from './classes/stylesheet';
 import QuestionView from './classes/forms/questionform'
+import UserDetailsView from './classes/forms/userdetailsform'
 
 export default class Mindgeek extends Component {
 
@@ -26,12 +27,24 @@ export default class Mindgeek extends Component {
       swipeToClose: true,
       sliderValue: 0.3,
       isModalOpen: false,
+      retries: 0,
+      isUserAnsweredQuestion: false,
     }
   }
 
   onUpdate(key,value){
     console.log("updating " + key + " with value = " + value);
     this.setState({[key]: value});
+  }
+
+  renderCorrectForm(){
+    var form;
+    if(this.state.isUserAnsweredQuestion){
+      form = <UserDetailsView onUpdate={(k,v) => this.onUpdate(k,v)} />
+    }else{
+      form = <QuestionView retries={this.state.retries} finalAnswer={this.finalAnswer} onUpdate={(k,v) => this.onUpdate(k,v)}/>
+    }
+    return form;
   }
 
   render() {
@@ -56,8 +69,18 @@ export default class Mindgeek extends Component {
         <Image
           source={require('./images/BB8.jpg')}
         />
-        <Modal style={CssStyle.modal} position={"center"} ref={"questionModal"} isOpen={this.state.isModalOpen}>
-          <QuestionView finalAnswer={this.finalAnswer} onUpdate={(k,v) => this.onUpdate(k,v)}/>
+        <Modal
+          style={CssStyle.modal}
+          position={"center"}
+          ref={"questionModal"}
+          isOpen={this.state.isModalOpen}
+          onClosed={() => {
+            this.onUpdate('isModalOpen',false);
+            this.onUpdate('retries',0);
+            //this.onUpdate('isUserAnsweredQuestion',false);
+          }}
+        >
+          {this.renderCorrectForm()}
         </Modal>
       </View>
     );

@@ -57,9 +57,9 @@ var CssStyle = StyleSheet.create({
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 300,
+    height: 350,
     width: 300,
-  }
+  },
 })
 
 module.exports = CssStyle;
