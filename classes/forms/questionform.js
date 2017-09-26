@@ -4,6 +4,7 @@ var React = require('react');
 var {View,Text,Button,Alert} = require('react-native');
 var NativeForm = require('tcomb-form-native');
 var CssStyle = require('../stylesheet');
+var RadioButtonView = require('./radioform');
 var UserDetailsView = require('./userdetailsform');
 var QuestionForm = NativeForm.form.Form;
 
@@ -16,7 +17,9 @@ var QuestionModel = NativeForm.struct({
 var options = {
   fields: {
     answer: {
-      error: 'Insert a valid value'
+      error: 'Insert a valid value',
+      hidden: true,
+
     }
   }
 };
@@ -27,7 +30,8 @@ var QuestionView = React.createClass({
     return {
       value: {
         answer: 0
-      }
+      },
+      radioValue: 0
     }
   },
 
@@ -57,6 +61,13 @@ var QuestionView = React.createClass({
     this.setState({value});
   },
 
+  onRadioButtonUpdate: function(radioValue){
+    var value = {
+      answer: radioValue
+    };
+    this.setState({value:value});
+  },
+
   render: function(){
     return (
       <View style={CssStyle.questionView}>
@@ -70,6 +81,7 @@ var QuestionView = React.createClass({
           value={this.state.value}
           onChange={this.onChange}
         />
+        <RadioButtonView onUpdate={(value) => this.onRadioButtonUpdate(value)} />
         <View style={[CssStyle.viewPlayButton,CssStyle.questionViewButton]}>
           <Button
             title="Submit"
