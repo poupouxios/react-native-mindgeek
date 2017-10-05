@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var {View,Text,Button,Alert} = require('react-native');
+var {View,Text,Button,Alert,TouchableOpacity} = require('react-native');
 var NativeForm = require('tcomb-form-native');
 var CssStyle = require('../stylesheet');
 var RadioButtonView = require('./radioform');
@@ -52,7 +52,10 @@ var QuestionView = React.createClass({
       }else{
         var retries = this.props.retries + 1;
         this.props.onUpdate('retries',retries);
-        alert("Sorry! Wrong answer. You made " + retries);
+        Alert.alert(
+          "Sorry!",
+          "Wrong answer. You made " + retries + " mistake(s)"
+        );
       }
     }
   },
@@ -82,13 +85,17 @@ var QuestionView = React.createClass({
           onChange={this.onChange}
         />
         <RadioButtonView onUpdate={(value) => this.onRadioButtonUpdate(value)} />
-        <View style={[CssStyle.viewPlayButton,CssStyle.questionViewButton]}>
-          <Button
-            title="Submit"
-            color="#fff"
-            onPress = {this.onPress}
-          />
-        </View>
+        <TouchableOpacity
+          onPress={this.onPress}
+          style={[CssStyle.viewPlayButton,CssStyle.questionViewButton]}
+          activeOpacity={0.8}
+        >
+          <View>
+            <Text style={CssStyle.generalButtonText}>
+              Submit
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     )
   }

@@ -35,6 +35,11 @@ var CssStyle = StyleSheet.create({
     overflow: 'hidden',
     width: "50%",
     alignItems: 'center',
+    padding: 10
+  },
+  generalButtonText: {
+    color: "#fff",
+    fontSize: 16
   },
   questionView: {
     flex: 1,
@@ -57,7 +62,7 @@ var CssStyle = StyleSheet.create({
   modal: {
     justifyContent: 'center',
     alignItems: 'center',
-    height: 350,
+    height: 330,
     width: 300,
   },
 })

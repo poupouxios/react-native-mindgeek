@@ -10,7 +10,8 @@ import {
   Text,
   Image,
   Button,
-  View
+  View,
+  TouchableOpacity
 } from 'react-native';
 
 import Modal from 'react-native-modalbox';
@@ -40,7 +41,7 @@ export default class Mindgeek extends Component {
   renderCorrectForm(){
     var form;
     if(this.state.isUserAnsweredQuestion){
-      form = <UserDetailsView onUpdate={(k,v) => this.onUpdate(k,v)} />
+      form = <UserDetailsView mistakes={this.state.retries} onUpdate={(k,v) => this.onUpdate(k,v)} />
     }else{
       form = <QuestionView retries={this.state.retries} finalAnswer={this.finalAnswer} onUpdate={(k,v) => this.onUpdate(k,v)}/>
     }
@@ -59,13 +60,17 @@ export default class Mindgeek extends Component {
         <Text style={CssStyle.textForce}>
           May the force be with you!
         </Text>
-        <View style={CssStyle.viewPlayButton}>
-          <Button
-            title="Play now!"
-            color="#fff"
-            onPress = {() => this.onUpdate('isModalOpen',true)}
-          />
-        </View>
+        <TouchableOpacity
+          onPress={() => this.onUpdate('isModalOpen',true)}
+          style={CssStyle.viewPlayButton}
+          activeOpacity={0.8}
+        >
+          <View>
+            <Text style={CssStyle.generalButtonText}>
+              Play Now!
+            </Text>
+          </View>
+        </TouchableOpacity>
         <Image
           source={require('./images/BB8.jpg')}
         />

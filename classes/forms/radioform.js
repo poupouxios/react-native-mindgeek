@@ -2,11 +2,10 @@
 
 var React = require('react');
 var {View,Text,Button,Alert} = require('react-native');
-var CssStyle = require('../stylesheet');
 var RadioButtonForm = require('react-native-simple-radio-button').default;
 
 var radio_values = [
-  {label: '8', value: 8},
+  {label: '8 ', value: 8},
   {label: '10', value: 10},
   {label: '12', value: 12}
 ];
@@ -30,7 +29,7 @@ var RadioButtonView = React.createClass({
 
   render: function(){
     return (
-      <View style={CssStyle.questionView}>
+      <View>
         <RadioButtonForm
           radio_props={radio_values}
           initial={-1}

@@ -1,7 +1,7 @@
 'use strict';
 
 var React = require('react');
-var {View,Text,Button,Alert} = require('react-native');
+var {View,Text,Button,Alert,TouchableOpacity} = require('react-native');
 var NativeForm = require('tcomb-form-native');
 var CssStyle = require('../stylesheet');
 var UserDetailsForm = NativeForm.form.Form;
@@ -46,9 +46,36 @@ var UserDetailsView = React.createClass({
   onPress: function(event){
     var value = this.refs.UserDetailsForm.getValue();
     if(value){
-      this.props.onUpdate('isUserAnsweredQuestion',false);
-      this.props.onUpdate('isModalOpen',false);
+      this.submitResultsToApi(value);
+      Alert.alert(
+        "Good Luck",
+        "Thanks for your details.",
+        [{
+          text: "OK", onPress: () =>
+          {
+            this.props.onUpdate('isUserAnsweredQuestion',false);
+            this.props.onUpdate('isModalOpen',false);
+          }
+        }]
+      );
+
     }
+  },
+
+  submitResultsToApi: function(values){
+    fetch('https://8f25a94d.ngrok.io/api/participant/create', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: values.firstname,
+        surname: values.surname,
+        email : values.email,
+        mistakes: this.props.mistakes
+      })
+    })
   },
 
   render: function(){
@@ -63,13 +90,17 @@ var UserDetailsView = React.createClass({
           options={options}
           value={this.state.value}
         />
-        <View style={[CssStyle.viewPlayButton,CssStyle.questionViewButton]}>
-          <Button
-            title="Submit"
-            color="#fff"
-            onPress = {this.onPress}
-          />
-        </View>
+        <TouchableOpacity
+          onPress={this.onPress}
+          style={[CssStyle.viewPlayButton,CssStyle.questionViewButton]}
+          activeOpacity={0.8}
+        >
+          <View>
+            <Text style={CssStyle.generalButtonText}>
+              Submit
+            </Text>
+          </View>
+        </TouchableOpacity>
       </View>
     )
   }
