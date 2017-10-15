@@ -11,13 +11,17 @@ import {
   Image,
   Button,
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  NetInfo,
+  Alert
 } from 'react-native';
 
 import Modal from 'react-native-modalbox';
 import CssStyle from './classes/stylesheet';
 import QuestionView from './classes/forms/questionform'
 import UserDetailsView from './classes/forms/userdetailsform'
+import ApiHandler from './classes/apihandler'
+import ProgressHud from 'react-native-progresshud'
 
 export default class Mindgeek extends Component {
 
@@ -30,7 +34,27 @@ export default class Mindgeek extends Component {
       isModalOpen: false,
       retries: 0,
       isUserAnsweredQuestion: false,
+      token: "",
+      isProgressHudOpen: false
     }
+  }
+
+  componentDidMount(){
+    NetInfo.isConnected.addEventListener(
+      'connectionChange',
+      this._handleFirstConnectivityChange
+    );
+  }
+
+  componentWillUnmount(){
+    NetInfo.isConnected.removeEventListener(
+      'connectionChange',
+      this._handleFirstConnectivityChange
+    );
+  }
+
+  _handleFirstConnectivityChange(status){
+    console.log("---Internet status = " + status + "-----------------");
   }
 
   onUpdate(key,value){
@@ -39,7 +63,7 @@ export default class Mindgeek extends Component {
   }
 
   renderCorrectForm(){
-    var form;
+    let form;
     if(this.state.isUserAnsweredQuestion){
       form = <UserDetailsView mistakes={this.state.retries} onUpdate={(k,v) => this.onUpdate(k,v)} />
     }else{
@@ -60,8 +84,28 @@ export default class Mindgeek extends Component {
         <Text style={CssStyle.textForce}>
           May the force be with you!
         </Text>
+        <ProgressHud
+          showHUD={this.state.isProgressHudOpen}
+          showLoading={true}
+          text="Let the fun begin.."
+        />
         <TouchableOpacity
-          onPress={() => this.onUpdate('isModalOpen',true)}
+          onPress={() =>
+            {
+              self.onUpdate('isProgressHudOpen',true);
+              let self = this;
+              ApiHandler.authenticateApp(this.state.token)
+                        .then(function(response){
+                          self.onUpdate('token',response.token);
+                          self.onUpdate('isProgressHudOpen',false);
+                          self.onUpdate('isModalOpen',true);
+
+                        })
+                        .catch(function(error){
+                          Alert.alert("Error","Oops.Something went wrong and cannot communicate with server " + error);
+                        });
+            }
+          }
           style={CssStyle.viewPlayButton}
           activeOpacity={0.8}
         >
@@ -82,7 +126,6 @@ export default class Mindgeek extends Component {
           onClosed={() => {
             this.onUpdate('isModalOpen',false);
             this.onUpdate('retries',0);
-            //this.onUpdate('isUserAnsweredQuestion',false);
           }}
         >
           {this.renderCorrectForm()}
