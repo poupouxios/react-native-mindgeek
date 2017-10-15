@@ -5,6 +5,7 @@ var {View,Text,Button,Alert,TouchableOpacity} = require('react-native');
 var NativeForm = require('tcomb-form-native');
 var CssStyle = require('../stylesheet');
 var UserDetailsForm = NativeForm.form.Form;
+var ApiHandler = require('../apihandler');
 
 var EmailComponent = NativeForm.refinement(NativeForm.String, function(value){
   return value.includes('@');
@@ -44,38 +45,44 @@ var UserDetailsView = React.createClass({
   },
 
   onPress: function(event){
+    this.props.onUpdate('progressHubText',"Submitting...");
+    this.props.onUpdate('isProgressHudOpen',true);
+
     var value = this.refs.UserDetailsForm.getValue();
     if(value){
       this.submitResultsToApi(value);
-      Alert.alert(
-        "Good Luck",
-        "Thanks for your details.",
-        [{
-          text: "OK", onPress: () =>
-          {
-            this.props.onUpdate('isUserAnsweredQuestion',false);
-            this.props.onUpdate('isModalOpen',false);
-          }
-        }]
-      );
-
     }
   },
 
   submitResultsToApi: function(values){
-    fetch('https://8f25a94d.ngrok.io/api/participant/create', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        name: values.firstname,
-        surname: values.surname,
-        email : values.email,
-        mistakes: this.props.mistakes
-      })
-    })
+    let participantData = {
+      name: values.firstname,
+      surname: values.surname,
+      email: values.email,
+      mistakes: this.props.mistakes
+    };
+    let self = this;
+    ApiHandler.processApi('post','/api/participant/create',participantData,this.props.token)
+              .then(function(response){
+                Alert.alert(
+                  "Good Luck",
+                  "Thanks for your details.",
+                  [{
+                    text: "OK", onPress: () =>
+                    {
+                      self.props.onUpdate('isProgressHudOpen',false);
+                      self.props.onUpdate('isUserAnsweredQuestion',false);
+                      self.props.onUpdate('isModalOpen',false);
+                    }
+                  }]
+                );
+              })
+              .catch(function(error){
+                Alert.alert(
+                  "Error",
+                  "Oops.Something went wrong when trying to submit your answer. Try submitting it again. Thanks."
+                );
+              });
   },
 
   render: function(){

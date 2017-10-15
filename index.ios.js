@@ -21,7 +21,7 @@ import CssStyle from './classes/stylesheet';
 import QuestionView from './classes/forms/questionform'
 import UserDetailsView from './classes/forms/userdetailsform'
 import ApiHandler from './classes/apihandler'
-import ProgressHud from 'react-native-progresshud'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 export default class Mindgeek extends Component {
 
@@ -35,7 +35,8 @@ export default class Mindgeek extends Component {
       retries: 0,
       isUserAnsweredQuestion: false,
       token: "",
-      isProgressHudOpen: false
+      isProgressHudOpen: false,
+      progressHubText: "Let the fun begin.."
     }
   }
 
@@ -65,7 +66,11 @@ export default class Mindgeek extends Component {
   renderCorrectForm(){
     let form;
     if(this.state.isUserAnsweredQuestion){
-      form = <UserDetailsView mistakes={this.state.retries} onUpdate={(k,v) => this.onUpdate(k,v)} />
+      form = <UserDetailsView
+                mistakes={this.state.retries}
+                token={this.state.token}
+                onUpdate={(k,v) => this.onUpdate(k,v)}
+              />
     }else{
       form = <QuestionView retries={this.state.retries} finalAnswer={this.finalAnswer} onUpdate={(k,v) => this.onUpdate(k,v)}/>
     }
@@ -84,24 +89,28 @@ export default class Mindgeek extends Component {
         <Text style={CssStyle.textForce}>
           May the force be with you!
         </Text>
-        <ProgressHud
-          showHUD={this.state.isProgressHudOpen}
-          showLoading={true}
-          text="Let the fun begin.."
+        <Spinner
+          visible={this.state.isProgressHudOpen}
+          textStyle={{color: "#fff"}}
+          overlayColor="rgba(51,51,51,0.80)"
+          textContent={this.state.progressHubText}
         />
         <TouchableOpacity
           onPress={() =>
             {
-              self.onUpdate('isProgressHudOpen',true);
+              this.refs.questionModal.close();
+              this.onUpdate('isProgressHudOpen',true);
+              this.onUpdate('progressHubText',"Let the fun begin..");
+
               let self = this;
               ApiHandler.authenticateApp(this.state.token)
                         .then(function(response){
                           self.onUpdate('token',response.token);
                           self.onUpdate('isProgressHudOpen',false);
                           self.onUpdate('isModalOpen',true);
-
                         })
                         .catch(function(error){
+                          self.onUpdate('isProgressHudOpen',false);
                           Alert.alert("Error","Oops.Something went wrong and cannot communicate with server " + error);
                         });
             }

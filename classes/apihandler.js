@@ -18,14 +18,14 @@ let errorOption = {
   title: "Error"
 };
 
-export default class ApiHandler{
+const ApiHandler = {
 
-  static authenticateApp(token: String){
+  authenticateApp: (token: String) => {
     let authenticateAppPromise = new Promise(function(success,failure){
       logger.logMessage("token = " + token);
       if(token === null || token === "" || token === undefined){
         logger.logMessage("Fetching token");
-        ApiHandler.call("post","/oauth/token",authenticationParams)
+        ApiHandler.processApi("post","/oauth/token",authenticationParams)
                   .then(function(response){
                     if(response.access_token){
                       success({token: response.access_token});
@@ -38,13 +38,16 @@ export default class ApiHandler{
                   });
       }else{
         logger.logMessage("Token exists?? token = " + token);
-        success({token: token});
+        setTimeout(
+          () => { success({token: token}); },
+          500
+        );
       }
     });
     return authenticateAppPromise;
-  }
+  },
 
-  static call(verb: String, route: String, parameters: Object, token: String){
+  processApi: (verb: String, route: String, parameters: Object, token: String) => {
     let apiCallPromise = new Promise(function(success,failure){
       ApiHandler.checkConnection()
                 .then((response) => {
@@ -70,10 +73,13 @@ export default class ApiHandler{
                         logger.logMessage("URL to call = " + url);
                         logger.logMessage(response);
                         logger.logMessage("-------------------");
+                        logger.logMessage("URL options");
+                        logger.logMessage(urlOptions);
                         if(!response.ok){
                           throw {status: response.status, message:errorOption.message};
+                        }else{
+                          return response.json();
                         }
-                        return response.json();
                       })
                       .then(function(response){
                         logger.logMessage("final response");
@@ -81,7 +87,7 @@ export default class ApiHandler{
                         success(response);
                       })
                       .catch(function(error){
-                        failure(status:error.status, message: error.message);
+                        failure(error);
                       });
                     }
                 })
@@ -91,9 +97,9 @@ export default class ApiHandler{
                 });
     });
     return apiCallPromise;
-  }
+  },
 
-  static generateParameters(parameters: Object){
+  generateParameters: (parameters: Object) => {
     if(!parameters){
       return "";
     }
@@ -105,9 +111,9 @@ export default class ApiHandler{
     });
     urlParams = urlParams.replace(/\&$/,'');
     return urlParams;
-  }
+  },
 
-  static checkConnection(){
+  checkConnection: () => {
     let promise = new Promise(function(success,failure){
       NetInfo.isConnected.fetch().done((isConnected) => {
         logger.logMessage("Checking if connection exists = " + isConnected);
@@ -121,9 +127,9 @@ export default class ApiHandler{
       });
     });
     return promise;
-  }
+  },
 
-  static generateHeaders(token: String){
+  generateHeaders: (token: String) => {
     let headers = new Headers();
     headers.append('Accept', 'application/json');
     headers.append('Content-Type', 'application/json');
@@ -134,3 +140,5 @@ export default class ApiHandler{
   }
 
 }
+
+module.exports = ApiHandler;
