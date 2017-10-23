@@ -3,7 +3,7 @@
 var {NetInfo,Alert} = require('react-native');
 import logger from './logger';
 
-let apiUrl = "https://0cd0db95.ngrok.io";
+let apiUrl = "https://7bb9d86b.ngrok.io";
 let authenticationParams = {
   grant_type : "password",
   client_id  : 4,
