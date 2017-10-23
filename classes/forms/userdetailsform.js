@@ -45,11 +45,11 @@ var UserDetailsView = React.createClass({
   },
 
   onPress: function(event){
-    this.props.onUpdate('progressHubText',"Submitting...");
-    this.props.onUpdate('isProgressHudOpen',true);
-
     var value = this.refs.UserDetailsForm.getValue();
+
     if(value){
+      this.props.onUpdate('progressHubText',"Submitting...");
+      this.props.onUpdate('isProgressHudOpen',true);
       this.submitResultsToApi(value);
     }
   },
