@@ -4,7 +4,7 @@
  * @flow
  */
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {
   AppRegistry,
   Text,
@@ -81,10 +81,10 @@ export default class Mindgeek extends Component {
     return (
       <View style={CssStyle.container}>
         <Text style={CssStyle.heading}>
-          Welcome to Mindgeeks Dark Side
+          Welcome to Mindgeeks Competition
         </Text>
         <Text style={CssStyle.instructions}>
-          Answer one question, fill your details and you will be automatically added to the draw for one BB8 Sphero.
+          Answer one question, fill your details and you will be automatically added to the draw.
         </Text>
         <Text style={CssStyle.textForce}>
           May the force be with you!
@@ -125,7 +125,9 @@ export default class Mindgeek extends Component {
           </View>
         </TouchableOpacity>
         <Image
-          source={require('./images/BB8.jpg')}
+          resizeMode="contain"
+          style={CssStyle.homeImage}
+          source={require('./images/mindgeek.png')}
         />
         <Modal
           style={CssStyle.modal}

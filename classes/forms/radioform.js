@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 var {View,Text,Button,Alert} = require('react-native');
 var RadioButtonForm = require('react-native-simple-radio-button').default;
 
@@ -10,7 +11,7 @@ var radio_values = [
   {label: '12', value: 12}
 ];
 
-var RadioButtonView = React.createClass({
+var RadioButtonView = createReactClass({
 
   getInitialState: function(){
     return {

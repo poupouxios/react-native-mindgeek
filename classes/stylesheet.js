@@ -15,6 +15,12 @@ var CssStyle = StyleSheet.create({
     textAlign: 'center',
     margin: 20
   },
+  homeImage: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    marginTop:20,
+    marginLeft:30
+  },
   instructions: {
     textAlign: 'center',
     color: '#333333',

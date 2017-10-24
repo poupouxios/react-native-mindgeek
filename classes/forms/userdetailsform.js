@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var createReactClass = require('create-react-class');
 var {View,Text,Button,Alert,TouchableOpacity} = require('react-native');
 var NativeForm = require('tcomb-form-native');
 var CssStyle = require('../stylesheet');
@@ -32,7 +33,7 @@ var options = {
   }
 }
 
-var UserDetailsView = React.createClass({
+var UserDetailsView = createReactClass({
 
   getInitialState: function(){
     return{

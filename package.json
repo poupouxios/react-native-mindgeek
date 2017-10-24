@@ -7,18 +7,19 @@
 		"test": "jest"
 	},
 	"dependencies": {
-		"react": "^16.0.0-beta.5",
+		"react": "16.0.0-beta.5",
 		"react-native": "^0.49.3",
 		"react-native-loading-spinner-overlay": "^0.5.2",
 		"react-native-modalbox": "^1.4.2",
 		"react-native-simple-radio-button": "^2.6.2",
+		"react-transform-hmr": "^1.0.4",
 		"tcomb-form-native": "^0.6.9"
 	},
 	"devDependencies": {
-		"babel-jest": "21.0.2",
-		"babel-preset-react-native": "3.0.2",
-		"jest": "21.0.2",
-		"react-test-renderer": "16.0.0-alpha.12"
+		"babel-jest": "21.2.0",
+		"babel-preset-react-native": "4.0.0",
+		"jest": "21.2.1",
+		"react-test-renderer": "^16.0.0-beta.5"
 	},
 	"jest": {
 		"preset": "react-native"
