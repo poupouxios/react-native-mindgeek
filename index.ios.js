@@ -81,7 +81,7 @@ export default class Mindgeek extends Component {
     return (
       <View style={CssStyle.container}>
         <Text style={CssStyle.heading}>
-          Welcome to Mindgeeks Competition
+          Welcome to Mindgeek Competition
         </Text>
         <Text style={CssStyle.instructions}>
           Answer one question, fill your details and you will be automatically added to the draw.

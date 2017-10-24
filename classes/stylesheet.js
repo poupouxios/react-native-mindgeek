@@ -10,7 +10,7 @@ var CssStyle = StyleSheet.create({
     marginTop: 20,
   },
   heading: {
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold',
     textAlign: 'center',
     margin: 20
@@ -25,12 +25,14 @@ var CssStyle = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     margin: 10,
+    fontSize:20
   },
   textForce: {
     textAlign: 'center',
     color: '#333333',
     margin: 10,
     fontWeight: 'bold',
+    fontSize:20
   },
   viewPlayButton: {
     backgroundColor: "#333333",
@@ -64,6 +66,7 @@ var CssStyle = StyleSheet.create({
   },
   questionViewHeading: {
     marginTop:0,
+    fontSize:20
   },
   modal: {
     justifyContent: 'center',
